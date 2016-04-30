@@ -7,15 +7,17 @@
     <h1> <a href="">Maria's blog</a> </h1>
   </div>
     {% for post in posts %}
-    <h2>
-      {{ post.title }}
-    </h2>
-    <p>
-        {{ post.text }}
-    </p>
-    <p>
-      <i> {{ post.published_date }} </i>
-    </p>
+    <div>
+      <h2>
+        <a href="">{{ post.title }}</a>
+      </h2>
+      <p>
+          {{ post.text|linebreaks }}
+      </p>
+      <p>
+        <i>published: {{ post.published_date }} </i>
+      </p>
+    </div>
     {% endfor %}
 </body>
 </html>
