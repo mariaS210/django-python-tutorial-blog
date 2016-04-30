@@ -6,11 +6,16 @@
   <div>
     <h1> <a href="">Maria's blog</a> </h1>
   </div>
-  <p>
-    Hi there!
-  </p>
-  <p>
-    It works!
-  </p>
+    {% for post in posts %}
+    <h2>
+      {{ post.title }}
+    </h2>
+    <p>
+        {{ post.text }}
+    </p>
+    <p>
+      <i> {{ post.published_date }} </i>
+    </p>
+    {% endfor %}
 </body>
 </html>
