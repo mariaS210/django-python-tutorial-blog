@@ -6,6 +6,7 @@
       <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
       {% if user.is_authenticated %}
         <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+        <a	class="btn	btn-default"	href="{%	url	'post_remove'	pk=post.pk	%}"><span	class="glyphicon	glyphicon-remove"></span></a>
       {% endif %}
     </h1>
     <p>
@@ -17,6 +18,10 @@
           published: {{ post.published_date }}
         </p>
       </div>
+    {% else %}
+    <p>
+      <a	class="btn	btn-default"	href="{%	url	'blog.views.post_publish'	pk=post.pk	%}">Publish</a>
+    </p>
     {% endif %}
   </div>
 {% endblock %}
