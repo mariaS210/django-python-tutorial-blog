@@ -20,5 +20,6 @@ from django.conf.urls import include
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
     url(r'', include('blog.urls')),
 ]
