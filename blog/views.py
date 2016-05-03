@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from .models import Post, Comment,  PostImage
-from .forms import PostForm, CommentForm
+from .forms import PostForm, CommentForm, UploadForm
 
 # Create your views here.
 def post_list(request):
@@ -85,4 +85,20 @@ def comment_remove(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     post = comment.post
     comment.delete()
+    return redirect('blog.views.post_detail', pk=post.pk)
+
+@login_required
+def upload_image(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method=="POST":
+        form = UploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            postimage = form.save(commit=False)
+            postimage.post = post
+            postimage.upload_date = timezone.now()
+            postimage.save()
+            return redirect('blog.views.post_detail', pk=post.pk)
+    else:
+        form=UploadForm()
+    return render(request, 'blog/upload_image.html', { 'form' : form})
     return redirect('blog.views.post_detail', pk=post.pk)

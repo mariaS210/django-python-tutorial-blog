@@ -125,3 +125,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 #for login page at blog
 LOGIN_REDIRECT_URL	=	'/'
+
+#for media upload in blog app
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

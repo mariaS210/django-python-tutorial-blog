@@ -37,7 +37,8 @@ class Comment(models.Model):
 
 class PostImage(models.Model):
     post = models.ForeignKey('blog.Post', related_name='images')
-    location = models.CharField(max_length=256)
+    location = models.ImageField("Image", upload_to="images/")
+    upload_date = models.DateTimeField(default=timezone.now)
     text = models.CharField(max_length=200)
 
     def __str__(self):

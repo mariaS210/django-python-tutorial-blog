@@ -24,16 +24,20 @@
     </p>
     {% endif %}
   </div>
-  <div>
+  {% if user.is_authenticated %}
+  <p>
+    <a class="btn	btn-default"	href="{%	url	'upload_image'	pk=post.pk	%}">Upload image</a>
+    <hr class="clearhr">
+  </p>
+  {% endif %}
   {% for postimage in post.images.all %}
     <div class="postimage">
-      <a target="_blank" href="{{ postimage.location }}">
-      <img src="{{ postimage.location }}" alt="{{ postimage.text }}">
-      <div class="desc"> {{ postimage.text }} </div>
+      <a target="_blank" href="{{ postimage.location.url }}">
+      <img src="{{ postimage.location.url }}" alt="{{ postimage.text }}">
+      </a><div class="desc"> {{ postimage.text }} </div>
     </div>
   {% endfor %}
-</div>
-  <hr>
+  <hr class="clearhr">
   <a	class="btn	btn-default"	href="{%	url	'add_comment_to_post'	pk=post.pk	%}">Add	comment</a>
   {% for comment in post.comments.all %}
     {% if user.is_authenticated or comment.approved_comment %}
