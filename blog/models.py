@@ -34,3 +34,11 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text
+
+class PostImage(models.Model):
+    post = models.ForeignKey('blog.Post', related_name='images')
+    location = models.CharField(max_length=256)
+    text = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.text

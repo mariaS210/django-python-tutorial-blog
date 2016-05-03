@@ -20,10 +20,19 @@
       </div>
     {% else %}
     <p>
-      <a	class="btn	btn-default"	href="{%	url	'blog.views.post_publish'	pk=post.pk	%}">Publish</a>
+      <a class="btn	btn-default"	href="{%	url	'blog.views.post_publish'	pk=post.pk	%}">Publish</a>
     </p>
     {% endif %}
   </div>
+  <div>
+  {% for postimage in post.images.all %}
+    <div class="postimage">
+      <a target="_blank" href="{{ postimage.location }}">
+      <img src="{{ postimage.location }}" alt="{{ postimage.text }}">
+      <div class="desc"> {{ postimage.text }} </div>
+    </div>
+  {% endfor %}
+</div>
   <hr>
   <a	class="btn	btn-default"	href="{%	url	'add_comment_to_post'	pk=post.pk	%}">Add	comment</a>
   {% for comment in post.comments.all %}
