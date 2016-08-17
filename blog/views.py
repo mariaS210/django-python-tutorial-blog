@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from .models import Post, Comment,  PostImage
-from .forms import PostForm, CommentForm, UploadForm
+from .models import Post, Comment, PostImage, PostText
+from .forms import PostForm, CommentForm, UploadForm, TextBlockForm
 
 # Create your views here.
 def post_list(request):
@@ -102,3 +102,18 @@ def upload_image(request, pk):
         form=UploadForm()
     return render(request, 'blog/upload_image.html', { 'form' : form})
     return redirect('blog.views.post_detail', pk=post.pk)
+
+@login_required
+def add_textblock(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method=="POST":
+        form=TextBlockForm(request.POST)
+        if form.is_valid():
+            textblock = form.save(commit=False)
+            textblock.post = post
+            textblock.save()
+            return redirect('blog.views.post_detail', pk=post.pk)
+    else:
+        form=TextBlockForm()
+    return render(request, 'blog/add_textblock.html', { 'form' : form})
+    #return redirect('blog.views.post_detail', pk=post.pk)

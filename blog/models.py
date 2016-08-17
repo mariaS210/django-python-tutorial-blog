@@ -43,3 +43,11 @@ class PostImage(models.Model):
 
     def __str__(self):
         return self.text
+
+class PostText(models.Model):
+    post = models.ForeignKey('blog.Post', related_name='textblocks')
+    index = models.IntegerField(default=1)
+    text = models.TextField("Textblock")
+
+    def __str__(self):
+        return str(self.id)

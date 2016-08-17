@@ -1,57 +1,90 @@
-{% extends 'blog/base.html' %}
+{% load staticfiles %}
+<html>
+<head>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+  <link href="http://fonts.googleapis.com/css?family=Ubuntu&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=Monda&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="{% static 'css/blog.css' %}">
 
-{% block content %}
-  <div class="post">
-    <h1>
-      <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
-      {% if user.is_authenticated %}
-        <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-        <a	class="btn	btn-default"	href="{%	url	'post_remove'	pk=post.pk	%}"><span	class="glyphicon	glyphicon-remove"></span></a>
-      {% endif %}
-    </h1>
-    <p>
-        {{ post.text|linebreaks }}
-    </p>
-    {% if post.published_date %}
-      <div class="date">
-        <p>
-          published: {{ post.published_date }}
-        </p>
-      </div>
+  <title>Maria's blog</title>
+</head>
+<body>
+  <div class="page-header">
+    {% if user.is_authenticated %}
+      <a	href="{%	url	'post_draft_list'	%}"	class="top-menu"><span	class="glyphicon	glyphicon-edit"></span></a>
+      <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+      <p class="top-menu">Hello {{ user.username }}<small>(<a href="{% url 'django.contrib.auth.views.logout' %}">Log out</a>)</small></p>
     {% else %}
-    <p>
-      <a class="btn	btn-default"	href="{%	url	'blog.views.post_publish'	pk=post.pk	%}">Publish</a>
-    </p>
+      <a href="{% url 'django.contrib.auth.views.login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
     {% endif %}
+    <h1> <a href="/">Maria's blog</a> </h1>
   </div>
-  {% if user.is_authenticated %}
-  <p>
-    <a class="btn	btn-default"	href="{%	url	'upload_image'	pk=post.pk	%}">Upload image</a>
-    <hr class="clearhr">
-  </p>
-  {% endif %}
-  {% for postimage in post.images.all %}
-    <div class="postimage">
-      <a target="_blank" href="{{ postimage.location.url }}">
-      <img src="{{ postimage.location.url }}" alt="{{ postimage.text }}">
-      </a><div class="desc"> {{ postimage.text }} </div>
-    </div>
-  {% endfor %}
-  <hr class="clearhr">
-  <a	class="btn	btn-default"	href="{%	url	'add_comment_to_post'	pk=post.pk	%}">Add	comment</a>
-  {% for comment in post.comments.all %}
-    {% if user.is_authenticated or comment.approved_comment %}
-      <div class="comment">
-        <div class="date"> created: {{ comment.created_date }} </div>
-        <strong> {{ comment.author }} </strong>
-        <p> {{ comment.text|linebreaks }} </p>
-        {% if not comment.approved_comment %}
-          <a	class="btn	btn-default"	href="{%	url	'comment_approve'	pk=comment.pk	%}"><span class="glyphicon glyphicon-ok"></span></a>
-          <a	class="btn	btn-default"	href="{%	url	'comment_remove'	pk=comment.pk	%}"><span	class="glyphicon	glyphicon-remove"></span></a>
-        {% endif %}
+  <div class="content container">
+    <div class="row">
+        <div class="col-md-8">  <div class="post">
+            <h1>
+              <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
+              {% if user.is_authenticated %}
+                <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a	class="btn	btn-default"	href="{%	url	'post_remove'	pk=post.pk	%}"><span	class="glyphicon	glyphicon-remove"></span></a>
+              {% endif %}
+            </h1>
+            <p>
+                {{ post.text|linebreaks }}
+            </p>
+            {% for textblock in post.textblocks.all %}
+              <p>
+                {{ textblock.text|linebreaks }}
+              </p>
+            {% endfor %}
+            {% if post.published_date %}
+              <div class="date">
+                <p>
+                  published: {{ post.published_date }}
+                </p>
+              </div>
+            {% else %}
+            <p>
+              <a class="btn	btn-default"	href="{%	url	'blog.views.post_publish'	pk=post.pk	%}">Publish</a>
+            </p>
+            {% endif %}
+          </div>
+          {% if user.is_authenticated %}
+          <p>
+            <a class="btn	btn-default"	href="{%	url	'upload_image'	pk=post.pk	%}">Upload image</a>
+            <a class="btn	btn-default"	href="{%	url	'add_textblock'	pk=post.pk	%}">Add block of text</a>
+            <hr class="clearhr">
+          </p>
+          {% endif %}
+          <a href="javascript:void(viewer.show(0))">Slideshow</a>
+          <hr class="clearhr">
+          <a	class="btn	btn-default"	href="{%	url	'add_comment_to_post'	pk=post.pk	%}">Add	comment</a>
+          {% for comment in post.comments.all %}
+            {% if user.is_authenticated or comment.approved_comment %}
+              <div class="comment">
+                <div class="date"> created: {{ comment.created_date }} </div>
+                <strong> {{ comment.author }} </strong>
+                <p> {{ comment.text|linebreaks }} </p>
+                {% if not comment.approved_comment %}
+                  <a	class="btn	btn-default"	href="{%	url	'comment_approve'	pk=comment.pk	%}"><span class="glyphicon glyphicon-ok"></span></a>
+                  <a	class="btn	btn-default"	href="{%	url	'comment_remove'	pk=comment.pk	%}"><span	class="glyphicon	glyphicon-remove"></span></a>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% empty %}
+            <p> No comments here yet! :( </p>
+          {% endfor %}
+        </div>
       </div>
-    {% endif %}
-  {% empty %}
-    <p> No comments here yet! :( </p>
+    </div>
+<script type="text/javascript" src="http://slideshow.triptracker.net/slide.js"></script>
+<script type="text/javascript">
+<!--
+  var viewer = new PhotoViewer();
+  {% for postimage in post.images.all %}
+    viewer.add('{{ postimage.location.url }}');
   {% endfor %}
-{% endblock %}
+//--></script>
+  </body>
+</html>
