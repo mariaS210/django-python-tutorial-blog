@@ -57,7 +57,10 @@
             <hr class="clearhr">
           </p>
           {% endif %}
-          <a href="javascript:void(viewer.show(0))">Slideshow</a>
+          <!-- <a href="javascript:void(viewer.show(0))">Slideshow</a> -->
+          {% for postimage in post.images.all %}
+            <img src="{{ postimage.location.url }}" alt="{{ postimage.text }}" width="200" onclick="javascript:void(viewer.show( {{ forloop.counter0 }} ))">
+          {% endfor %}
           <hr class="clearhr">
           <a	class="btn	btn-default"	href="{%	url	'add_comment_to_post'	pk=post.pk	%}">Add	comment</a>
           {% for comment in post.comments.all %}
@@ -85,6 +88,9 @@
   {% for postimage in post.images.all %}
     viewer.add('{{ postimage.location.url }}');
   {% endfor %}
-//--></script>
+
+//-->
+</script>
+
   </body>
 </html>
