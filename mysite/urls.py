@@ -17,9 +17,13 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls import include
 
+#from django.contrib.auth import views as auth_views
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
+    #url(r'^accounts/login/$', auth_views.login),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
+    #url(r'accounts/logout/$', auth_views.logout),
     url(r'', include('blog.urls')),
 ]
